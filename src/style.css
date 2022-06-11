@@ -1,0 +1,9 @@
+.contact {
+    max-width: 400px;
+    margin: 20px  auto;
+    background-color: blanchedalmond;
+}
+
+.card.contact .card-body {
+    padding: 20px;
+}
