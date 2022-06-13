@@ -11,13 +11,11 @@ class ContactDetails extends Component {
 
   componentDidMount () {
     const id = this.props.match.params.id;
-    axios.get(`https://randomuser.me/api/?login-uuid=${id}&seed=rewdfg`
-    )
+    axios.get(`http://localhost:400/contacts/${id}`)
     .then(data => {
-        console.log(data.data.results[0]);
-        console.log(data.data.results)
+        console.log(data)
         this.setState({
-            contact: data.data.results[0],
+            contact: data.data,
         })
     })
     .catch(err => console.log(err));
@@ -36,16 +34,16 @@ class ContactDetails extends Component {
   render() {
     // console.log(this.props);
   const {contact} = this.state
-  console.log(format(new Date(), 'yyyy/MM/dd kk:mm:ss'));
+
     // console.log(this.props.match.params.id)
     return (
       <div className='card contact' style={{maxWidth:'400px'}}>
       <div className='card-body'>
-        <img className='card-img-top mb-3' alt={contact?.name?.first} src={contact?.picture?.large} />
-        <h3 className='card-title'>{contact?.name?.first} {contact?.name?.last}</h3>
-        <p className='card-text'>{contact?.email}</p>
-        <h5 className='card-text'>{contact?.gender}</h5>
-        <p className='card-text'> Date of Barth: {contact?.dob?.date}</p>
+        <img className='card-img-top mb-3' alt={contact.first_name} src={contact.picture} />
+        <h3 className='card-title'>{contact.first_name} {contact.last_name}</h3>
+        <p className='card-text'>{contact.email}</p>
+        <h5 className='card-text'>{contact.gender}</h5>
+        <p className='card-text'> Date of Barth: {new Date(contact.dob).getUTCFullYear()}</p>
       </div>
       <button className='btn btn-danger' onClick={() => this.props.history.goBack() }>GO BACK</button>
     </div>

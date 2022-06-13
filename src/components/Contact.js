@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
+import dayjs from 'dayjs';
 
 
 export default class Contact extends Component {
@@ -8,12 +9,12 @@ export default class Contact extends Component {
     return (
       <div className='card contact' style={{maxWidth:'400px'}}>
         <div className='card-body'>
-          <img className='mb-3' alt={contact.first} src={contact.picture.large} />
-          <h3 className='card-title mb-2'>{contact.name.first} {contact.name.last}</h3>
+          <img className='mb-3' alt={contact.first_name} src={contact.picture} />
+          <h3 className='card-title mb-2'>{contact.first_name} {contact.last_name}</h3>
           <p className='card-text'>{contact.email}</p>
           <h5 className='card-text'>{contact.gender}</h5>
-          <p className='card-text'>Date of Barth: {contact.dob.date}</p>
-          <Link className='btn btn-primary btn-large' to={`/contacts/${contact.uuid}`}>More Details</Link>
+          <p className='card-text'>Date of Barth: {dayjs(contact.dob).format('DD/MM/YYYY')}</p>
+          <Link className='btn btn-primary btn-large' to={`/contacts/${contact.id}`}>More Details</Link>
         </div>
       </div>
     )
