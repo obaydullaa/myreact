@@ -1,25 +1,27 @@
 
-import React from 'react';
-import { Link,} from 'react-router-dom';
+import React, { Component } from 'react';
+import { withRouter, Link,} from 'react-router-dom';
 import axios from "axios";
 
 
-const ContactDetails = (props) => {
-  const [contact, setContact] = React.useState(null)
-  const [loading, setLoading] = React.useState(true)
+class ContactDetails extends Component {
+  state = {
+    contact: {},
+    loading: true,
+  }
 
-  console.log(props);
-
-  const id = props.match.params.id;
-  React.useEffect(() => {
+  componentDidMount () {
+    const id = this.props.match.params.id;
     axios.get(`http://localhost:400/contacts/${id}`)
     .then(({data}) => {
-        setContact(data)
-        setLoading(false)
+        console.log(data)
+        this.setState({
+            contact: data,
+            loading: false,
+        })
     })
     .catch(err => console.log(err));
-  }, [id])
- 
+}
 
   // findContact() {
   //   const id = this.props.match.params.id;
@@ -31,15 +33,17 @@ const ContactDetails = (props) => {
   // componentDidMount() {
   //   this.findContact();
   // }
-  const handleDeleteContact = (id) => {
+  handleDeleteContact = (id) => {
      axios.delete(`http://localhost:400/contacts/${id}`)
      .then(data => {
-      props.history.push('/contacts')
+      this.props.history.push('/contacts')
      }).catch(err => {
+      console.log(err)
      }).catch(err => console.log(err))
   }
-
+  render() {
     // console.log(this.props);
+  const {contact, loading} = this.state
 
     // console.log(this.props.match.params.id)
     return (
@@ -53,14 +57,13 @@ const ContactDetails = (props) => {
             <h5 className='card-text'>{contact.gender}</h5>
             <p className='card-text'> Date of Barth: {new Date(contact.dob).getUTCFullYear()}</p>
           </div>
-          <buttonLink className='btn btn-danger mb-2' onClick={() => handleDeleteContact(contact.id)} >Delete Contact </buttonLink>
+          <buttonLink className='btn btn-danger mb-2' onClick={() => this.handleDeleteContact(contact.id)} >Delete Contact </buttonLink>
           <Link className='btn btn-info mb-2' to={`/edit/${contact.id}`} >Edit Contact </Link>
-          <button className='btn btn-danger' onClick={() => props.history.goBack() }>GO BACK</button>
+          <button className='btn btn-danger' onClick={() => this.props.history.goBack() }>GO BACK</button>
       </div>
       )}
       </>
     )
   }
-
-
-export default ContactDetails;
+}
+export default withRouter(ContactDetails)

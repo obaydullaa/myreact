@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { Component } from 'react'
+import { withRouter } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import axios from 'axios';
 
-const EditContact = (props) => {
-    const [contact, setContact] = React.useState({
+class EditContact extends Component {
 
+state = {
     firstName: '',
     lastName: '',
     email: '',
@@ -12,65 +13,51 @@ const EditContact = (props) => {
     picture: '',
     gender: '', 
     error: ''
-})
-
-const {id} = props.match.params;
-React.useEffect( () => {
+}
+ 
+componentDidMount() {
+    const {id} = this.props.match.params;
     axios.get(`http://localhost:400/contacts/${id}`) 
     .then(({data}) => {
         // const {first_name:firstName, last_name:lastName, email, dob, picture, gender} = data;
-        setContact({  
+        this.setState({  
             ...data,
             dob: data.dob && new Date(data.dob), 
         })
     })
-    .catch(err => 
-        setContact((contact) => ({
-            ...contact,
-        error: err.message
+    .catch(err => this.setState({
+        error: err.message,
     }))
-    )
-},[id])
- 
+}
 
-const handleChange = (e) => {
-    setContact({
-        ...contact,
+handleChange = (e) => {
+    this.setState({
         [e.target.name]: e.target.value,
     })
 }
  
-const handleSubmit = (e) => {
-    const {firstName, lastName, email, dob, picture, gender}  = contact;
+handleSubmit = (e) => {
+    const {firstName, lastName, email, dob, picture, gender}  = this.state;
     const {id} = this.props.match.params;
     e.preventDefault();
 
     if(firstName === '' || lastName === '' || email === '' || dob === '' || picture === '' || gender === ''){
-        setContact({
+        this.setState({
             error: 'Pleas fill all the input with valid info',
         })
     }else{
         // Update data to the api server
-        axios.put(`http://localhost:400/contacts/${id}`, contact)
-        .then(({data}) => props.history.push(`/contacts/${id}`))
-        .catch(err =>
-             setContact({
-                ...contact,
+        axios.put(`http://localhost:400/contacts/${id}`, this.state)
+        .then(({data}) => this.props.history.push(`/contacts/${id}`))
+        .catch(err => this.setState({
            error: err.message,
         }))
 
+
     }
 }
-
-const handleDateChanger = data => {
-    setContact({
-        ...contact,
-        dob: data,
-    })
-}
-
-
-    const {firstName, lastName, email, dob, picture, gender, error}  = contact;
+  render() {
+    const {firstName, lastName, email, dob, picture, gender, error}  = this.state;
     return (
         <div className='mt-5 mb-5'            
         style={{
@@ -79,18 +66,18 @@ const handleDateChanger = data => {
         }}>
             <h1 className='text-center mb-4'>Edit Contact</h1>
             {error && <div className='alert alert-danger'>{error}</div>}
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={this.handleSubmit}>
                 <div className="mb-3">
                     <label htmlFor="firstName" className="form-label">First Name</label>
-                    <input type="text" name="firstName" onChange={handleChange} value={firstName} className="form-control"/>
+                    <input type="text" name="firstName" onChange={this.handleChange} value={firstName} className="form-control"/>
                 </div>
                 <div className="mb-3">
                     <label htmlFor="lastName" className="form-label">Last Name</label>
-                    <input type="text" name="lastName" onChange={handleChange} value={lastName} className="form-control"/>
+                    <input type="text" name="lastName" onChange={this.handleChange} value={lastName} className="form-control"/>
                 </div>
-                <div className="mb-3 onChange={handleChange}3">
+                <div className="mb-3 onChange={this.handleChange}3">
                     <label htmlFor="email" className="form-label">Email address</label>
-                    <input type="email" name="email" onChange={handleChange} value={email} className="form-control"/>
+                    <input type="email" name="email" onChange={this.handleChange} value={email} className="form-control"/>
                 </div>
                 <div className="mb-3">
                 <label htmlFor="email" className="form-label">Date of Birth</label>
@@ -101,15 +88,15 @@ const handleDateChanger = data => {
                         dateFormat='dd/MM/yyyy'
                         dropdownMode='select'
                         maxDate={new Date()}
-                        onChange={handleDateChanger}
+                        onChange={this.handleDateChanger}
                     />
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="picture" className="form-label" onChange={handleChange} value={picture}>Picture</label>
-                    <input type="url" name="picture" onChange={handleChange} value={picture} className="form-control"/>
+                    <label htmlFor="picture" className="form-label" onChange={this.handleChange} value={picture}>Picture</label>
+                    <input type="url" name="picture" onChange={this.handleChange} value={picture} className="form-control"/>
                 </div>
                 <div className='mb-5'>
-                    <select name='gender' className='form-select' onChange={handleChange} value={gender}>
+                    <select name='gender' className='form-select' onChange={this.handleChange} value={gender}>
                         <option value='' disabled> {' '}Select Gender</option>
                         <option value='male'>Male</option>
                         <option value='female'>Female</option>
@@ -120,7 +107,8 @@ const handleDateChanger = data => {
             </form>
         </div>
     )
+  }
 }
 
 
-export default EditContact;
+export default withRouter(EditContact);

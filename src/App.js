@@ -108,14 +108,13 @@
 
 */
 
-import React, {Component} from "react";
+import React from "react";
 import Contacts from "./pages/Contacts";
 // import { BrowserRouter as BrowserRouter, Route } from 'react-router-dom';
 // import { BrowserRouter, Route, Link } from "react-router-dom";
 // import {BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import axios from "axios";
 
 import Nav from "./components/Nav";
 import ContactDetails from "./pages/ContactDetails";
@@ -123,54 +122,30 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import AddContact from "./pages/AddContact";
 import EditContact from "./pages/EditContact";
+import NotFound from "./pages/NotFound";
 
 import  './style.css'
 // import  contacts  from "./data.json";
 
-export default class App extends Component {
-    state = {
-        contacts: []
-      }
-    componentDidMount () {
-        axios.get('http://localhost:400/contacts'
-        )
-        .then(({data}) => {
-            console.log(data)
-            this.setState({
-                contacts: data,
-            })
-        })
-        .catch(err => console.log(err));
-    }
+const App = () => {
 
-    render() {
-        const {contacts} = this.state;
-       return (       
-        <Router>
-            <Nav />
-            <Switch>
-                <Route exact path='/'> <Home /> </Route>
-                <Route path='/About'><About /> </Route>
-                <Route path='/add-contact'><AddContact /> </Route>
-                <Route path='/contacts/:id'> <ContactDetails contacts={contacts} /></Route>
-                <Route path='/edit/:id'> <EditContact /></Route>
-                <Route path='/contacts'> <Contacts contacts={contacts} /> </Route>
-            </Switch>
-        </Router>
+    // const { contacts } = state;
+    return (       
+     <Router>
+         <Nav />
+         <Switch>
+             <Route exact path='/' component={Home} />
+             <Route path='/About' component={About} /> 
+             <Route path='/add-contact' component={AddContact} />
+             <Route path='/contacts/:id' component={ContactDetails} /> 
 
-        // <BrowserRouter>
-        //     <Nav />
-        //         <Routes>
-        //             <Route path='/' element={<Home />} />
-        //             <Route path='/contacts' element={<Contacts />} />
-        //             <Route path='/contacts/:id' element={<ContactDetails />} />
-        //             <Route path='/About' element={<About />} />
-        //         </Routes>
-            
-        // </BrowserRouter>
-                   
-       )
-    }
-} 
+             <Route path='/edit/:id' component={EditContact} />
+             <Route path='/contacts' component={Contacts} />
+             <Route component={NotFound} />
 
+         </Switch>
+     </Router>        
+    )
+}
 
+export default App;
