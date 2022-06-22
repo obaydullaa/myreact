@@ -14,6 +14,7 @@ export const ContactsProvider = props => {
     React.useEffect(() => {
         axios.get(`${process.env.REACT_APP_API_URI}/contacts`)
         .then(({ data }) => {
+            console.log('Get Data')
             setState ({
             contacts: data,
            })
