@@ -15,7 +15,10 @@ const Contacts = (props) => {
   const context = React.useContext(ContactsContext);
   const [search, setSearch] = React.useState('');
   const {contacts} = context;
-  const filteredContacts = contacts.filter(contact => contact.firstName.includes(search) || contact.lastName.includes(search) )
+  const filteredContacts = 
+  contacts.length > 0 &&
+  contacts.filter(
+    contact => contact.firstName.includes(search) || contact.lastName.includes(search) )
   
     return (
       <div style={contactStyle} className='mt-5'>

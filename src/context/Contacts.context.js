@@ -12,7 +12,7 @@ export const ContactsProvider = props => {
     });
 
     React.useEffect(() => {
-        axios.get('http://localhost:400/contacts')
+        axios.get(`${process.env.REACT_APP_API_URI}/contacts`)
         .then(({ data }) => {
             setState ({
             contacts: data,

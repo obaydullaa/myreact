@@ -114,7 +114,7 @@ import Contacts from "./pages/Contacts";
 // import { BrowserRouter, Route, Link } from "react-router-dom";
 // import {BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import {HashRouter as Router, Route, Switch} from 'react-router-dom';
 
 import Nav from "./components/Nav";
 import ContactDetails from "./pages/ContactDetails";

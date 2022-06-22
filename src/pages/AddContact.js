@@ -16,6 +16,11 @@ const AddContact = (props) => {
         gender: 'male',
         error: '',
     })
+    const [alert, setAlert] = React.useState(false) 
+    
+    React.useEffect(() => {
+        setAlert(false)
+    }, [])
 
     const handleChange = (e) => {
         setContact ({
@@ -35,22 +40,28 @@ const AddContact = (props) => {
         const {firstName, lastName, email, dob, picture, gender}  = contact;
         e.preventDefault();
 
-        // if(firstName === '') {
-        //     this.setState({
-        //         error: {
-        //             firstName: 'First Name is Required',
-        //         }
-        //     })
-        // }
+      
 
         if(firstName === '' || lastName === '' || email === '' || dob === '' || picture === '' || gender === ''){
             setContact({
                 ...contact,
                 error: 'Pleas fill all the input with valid info',
             })
+            setAlert(true);
+
+            // if(firstName ===''){
+            //     setContact({
+            //         ...contact,
+            //         error: 'New Error',
+            //     })
+            // }
+
         }else{
-            //sending API request to the server 
-            axios.post('http://localhost:400/contacts', contact )
+            console.log("else" + process.env.REACT_APP_API_URI)
+            setAlert(false);
+
+            // sending API request to the server 
+            axios.post(` ${process.env.REACT_APP_API_URI}/contacts`, contact )
             .then(contact => {
                 this.props.history.push('/contacts')
             }).catch(error => console.log(error))
@@ -66,7 +77,10 @@ const AddContact = (props) => {
             margin: '0 auto'
         }}>
             <h1 className='text-center mb-4'>Add Contact</h1>
-            {error && <div className='alert alert-danger'>{error}</div>}
+           {alert ? <div className='alert alert-danger'>{error}</div> : ''}
+
+            {/* {error && <div className='alert alert-danger'>{error}</div>} */}
+
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label htmlFor="firstName" className="form-label">First Name</label>

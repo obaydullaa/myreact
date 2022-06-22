@@ -16,10 +16,10 @@ const EditContact = (props) => {
 
 const {id} = props.match.params;
 React.useEffect( () => {
-    axios.get(`http://localhost:400/contacts/${id}`) 
+    axios.get(`${process.env.REACT_APP_API_URI}/contacts/${id}`) 
     .then(({data}) => {
         // const {first_name:firstName, last_name:lastName, email, dob, picture, gender} = data;
-        setContact({  
+        setContact({   
             ...data,
             dob: data.dob && new Date(data.dob), 
         })
@@ -51,7 +51,7 @@ const handleSubmit = (e) => {
         })
     }else{
         // Update data to the api server
-        axios.put(`http://localhost:400/contacts/${id}`, contact)
+        axios.put(`${process.env.REACT_APP_API_URI}/contacts/${id}`, contact)
         .then(({data}) => props.history.push(`/contacts/${id}`))
         .catch(err =>
              setContact({
